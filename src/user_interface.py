@@ -14,7 +14,8 @@ class UserInterface:
                 rows = int(movie_title_and_seats[1])
                 seats_per_row = int(movie_title_and_seats[2])
                 return MovieAndSeats(title, rows, seats_per_row)
-            except (ValueError, IndexError):
+
+            except IndexError:
                 print("Please enter the correct format.")
             except Exception as e:
                 print(e)
@@ -22,6 +23,7 @@ class UserInterface:
     def main_menu(self, movie_and_seats: MovieAndSeats):
         """ Main menu """
         while True:
+            movie_and_seats.display_seating_map()
             print("Welcome to Rocket Cinemas")
             print(
                 f"[1] Book tickets for {movie_and_seats.title} ({movie_and_seats.available_seats} seats available)")
