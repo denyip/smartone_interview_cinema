@@ -23,17 +23,17 @@ class UserInterface:
     def main_menu(self, movie_and_seats: MovieAndSeats):
         """ Main menu """
         while True:
-            movie_and_seats.display_seating_map()
+            self.display_seating_map(movie_and_seats)
             print("Welcome to Rocket Cinemas")
             print(
-                f"[1] Book tickets for {movie_and_seats.title} ({movie_and_seats.available_seats} seats available)")
+                f"[1] Book tickets for {movie_and_seats.title} ({movie_and_seats.total_seats} seats available)")
             print("[2] Check bookings")
             print("[3] Exit")
             print("Please enter your selection:")
             selection = input("> ")
 
             if selection == "1":
-                self.book_tickets()
+                self.book_tickets(movie_and_seats)
             if selection == "2":
                 print("2...")
             if selection == "3":
@@ -42,7 +42,7 @@ class UserInterface:
             else:
                 print("Please enter a valid selection.")
 
-    def book_tickets(self):
+    def book_tickets(self, movie_and_seats: MovieAndSeats):
         """Book tickets menu"""
         while True:
             try:
@@ -54,8 +54,25 @@ class UserInterface:
                 if num_of_tickets < 1:
                     print("Please enter a number greater than 0.")
                     continue
-                if num_of_tickets > self.available_seats:
+                if num_of_tickets > movie_and_seats.available_seats:
                     print("Not enough seats available.")
                     continue
             except ValueError:
                 print("Please enter a valid number.")
+
+    def display_seating_map(self, movie_and_seats: MovieAndSeats):
+        """ Display seating map """
+        LETTER_A_ASCII = 65
+        rows = movie_and_seats.rows
+        seats_per_row = movie_and_seats.seats_per_row
+        seating_map = movie_and_seats.seating_map
+        total_width = (seats_per_row*2)+1
+        screen_text = "S C R E E N"
+        screen_text_padding = " "*((total_width - len(screen_text)) // 2)
+        print(f"{screen_text_padding}{screen_text}{screen_text_padding}")
+        print("-" * total_width)
+        for i in range(rows-1, -1, -1):
+            row_letter = chr(LETTER_A_ASCII + i)
+            print(f"{row_letter} {' '.join(seating_map[i])}")
+        number_str = " ".join(str(i+1) for i in range(seats_per_row))
+        print(f"  {number_str}")
