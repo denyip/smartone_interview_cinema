@@ -93,6 +93,9 @@ class BookingServices:
         return self.current_booking_id
 
     def confirm_booking(self):
+        for seat in self.best_seats:
+            row, col = seat
+            self.target_seating_map[row][col] = UNAVAILABLE_SEAT_MARK
         self.movie_and_seats.seating_map = self.target_seating_map
         self.movie_and_seats.available_seats -= self.num_of_tickets
         self.movie_and_seats.booking_records[self.current_booking_id] = self.best_seats
