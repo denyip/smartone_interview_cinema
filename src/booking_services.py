@@ -7,6 +7,13 @@ class BookingServices:
         self.target_seating_map = [row[:] for row in self.master_seating_map]
 
     def find_the_best_seats(self):
+        """
+            - Start from the furthest row from the screen
+            - Start from the middle-most possible col.
+            - When a row is not enough to accommodate the number of tickets, it should overflow to the next row closer to the screen
+        Returns:
+            List[List[str]]: target seating map
+        """
         master_seating_map = self.master_seating_map
         target_seating_map = self.target_seating_map
         num_of_tickets = self.num_of_tickets

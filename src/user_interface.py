@@ -61,7 +61,10 @@ class UserInterface:
                     continue
                 booking_services = BookingServices(movie_and_seats, num_of_tickets)
                 target_seating_map = booking_services.find_the_best_seats()
-                self.display_seating_map(target_seating_map)
+                unconfirmed_seating_map = [row[:] for row in movie_and_seats.seating_map]
+                movie_and_seats.seating_map = target_seating_map
+                print(f"Successfully reserved {num_of_tickets} {movie_and_seats.title} tickets.")
+                self.display_seating_map(unconfirmed_seating_map)
             except ValueError:
                 print("Please enter a valid number.")
 
