@@ -36,30 +36,35 @@ class BookingServices:
                 mid_seat_pos = []
                 mid_seat_pos.append(seating_per_row // 2 - 1)
                 mid_seat_pos.append(seating_per_row // 2)
-                if seating_map[current_searching_row][mid_seat_pos[0]] == AVAILABLE_SEAT_MARK and seats_need_to_book > 0:
+                mid_left_seat_pos = mid_seat_pos[0]
+                mid_right_seat_pos = mid_seat_pos[1]
+                if seating_map[current_searching_row][mid_left_seat_pos] == AVAILABLE_SEAT_MARK and seats_need_to_book > 0:
                     self.best_seats.append(
-                        (current_searching_row, mid_seat_pos[0]))
+                        (current_searching_row, mid_left_seat_pos))
                     seats_need_to_book -= 1
-                if seating_map[current_searching_row][mid_seat_pos[1]] == AVAILABLE_SEAT_MARK and seats_need_to_book > 0:
+                if seating_map[current_searching_row][mid_right_seat_pos] == AVAILABLE_SEAT_MARK and seats_need_to_book > 0:
                     self.best_seats.append(
-                        (current_searching_row, mid_seat_pos[1]))
+                        (current_searching_row, mid_right_seat_pos))
                     seats_need_to_book -= 1
                 seat_idx = 1
                 while seats_need_to_book > 0 and mid_seat_pos[1] + seat_idx < seating_per_row and mid_seat_pos[0] - seat_idx >= 0:
-                    if seating_map[current_searching_row][mid_seat_pos[1] + seat_idx] == AVAILABLE_SEAT_MARK:
+                    left_seat_pos = mid_left_seat_pos - seat_idx
+                    right_seat_pos = mid_right_seat_pos + seat_idx
+                    if seating_map[current_searching_row][right_seat_pos] == AVAILABLE_SEAT_MARK:
                         self.best_seats.append(
-                            (current_searching_row, mid_seat_pos[1] + seat_idx))
+                            (current_searching_row, right_seat_pos))
                         seats_need_to_book -= 1
-                    if seating_map[current_searching_row][mid_seat_pos[0] - seat_idx] == AVAILABLE_SEAT_MARK and seats_need_to_book > 0:
+                    if seating_map[current_searching_row][left_seat_pos] == AVAILABLE_SEAT_MARK and seats_need_to_book > 0:
                         self.best_seats.append(
-                            (current_searching_row, mid_seat_pos[0] - seat_idx))
+                            (current_searching_row, left_seat_pos))
                         seats_need_to_book -= 1
                     seat_idx += 1
             else:
                 mid_seat_pos = seating_per_row // 2
                 # Try to fill the middle-most seats first
                 if seating_map[current_searching_row][mid_seat_pos] == AVAILABLE_SEAT_MARK and seats_need_to_book > 0:
-                    self.best_seats.append((current_searching_row, mid_seat_pos))
+                    self.best_seats.append(
+                        (current_searching_row, mid_seat_pos))
                     seats_need_to_book -= 1
                 seat_idx = 1
                 while seats_need_to_book > 0 and mid_seat_pos + seat_idx <= seating_per_row and mid_seat_pos - seat_idx >= 0:
