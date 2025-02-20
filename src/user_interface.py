@@ -6,7 +6,7 @@ import re
 
 class UserInterface:
     def __init__(self):
-        pass
+        self.movie_and_seats = None
 
     def get_movie_and_seats(self):
         """ Get movie information from user """
@@ -17,15 +17,17 @@ class UserInterface:
                 title = movie_title_and_seats[0]
                 rows = int(movie_title_and_seats[1])
                 seats_per_row = int(movie_title_and_seats[2])
-                return MovieAndSeats(title, rows, seats_per_row)
-
+                self.movie_and_seats = MovieAndSeats(title, rows, seats_per_row)
+                break
             except IndexError:
                 print("Please enter the correct format.")
             except Exception as e:
                 print(e)
 
-    def main_menu(self, movie_and_seats: MovieAndSeats):
+    def main_menu(self):
         """ Main menu """
+        movie_and_seats = self.movie_and_seats
+        print(f"Movie title: {movie_and_seats.title}, Rows: {movie_and_seats.rows}, Seats per row: {movie_and_seats.seats_per_row}")
         while True:
             self.display_seating_map(movie_and_seats.seating_map)
             print("Welcome to Rocket Cinemas")
@@ -37,17 +39,18 @@ class UserInterface:
             selection = input("> ")
 
             if selection == "1":
-                self.book_tickets(movie_and_seats)
+                self.book_tickets()
             if selection == "2":
-                self.check_bookings(movie_and_seats)
+                self.check_bookings()
             if selection == "3":
                 print("Thank you for using Rocket Cinemas system. Bye!")
                 break
             else:
                 print("Please enter a valid selection.")
 
-    def book_tickets(self, movie_and_seats: MovieAndSeats):
+    def book_tickets(self):
         """Book tickets menu"""
+        movie_and_seats = self.movie_and_seats
         while True:
             try:
                 num_of_tickets = input(
@@ -97,7 +100,6 @@ class UserInterface:
 
     def display_seating_map(self, seating_map: List[List[str]]):
         """ Display seating map """
-        LETTER_A_ASCII = 65
         rows = len(seating_map)
         seats_per_row = len(seating_map[0])
         total_width = (seats_per_row*2)+1
@@ -110,7 +112,7 @@ class UserInterface:
         number_str = SPACE_CHAR.join(str(i+1) for i in range(seats_per_row))
         print(f"  {number_str}")
     
-    def check_bookings(self, movie_and_seats: MovieAndSeats):
+    def check_bookings(self):
         """ Check bookings """
     
     # def is_seat_input_string_valid(self, seat_input: str):
