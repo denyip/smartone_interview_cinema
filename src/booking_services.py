@@ -24,46 +24,29 @@ class BookingServices:
         num_of_tickets = self.num_of_tickets
         rows = len(seating_map)
         seating_per_row = len(seating_map[0])
-        
+
         if num_of_tickets > self.movie_and_seats.available_seats:
             print("Not enough seats available.")
             return self.best_seats
 
         mid_seat_pos = seating_per_row // 2
-        if num_of_tickets < seating_per_row:
-            seats_need_to_book = num_of_tickets
-            for current_searching_row in range(rows):
-                # Try to fill the middle-most seats first
-                if seating_map[current_searching_row][mid_seat_pos] == AVAILABLE_SEAT_MARK and seats_need_to_book > 0:
-                    self.best_seats.append((current_searching_row, mid_seat_pos))
+        seats_need_to_book = num_of_tickets
+        for current_searching_row in range(rows):
+            # Try to fill the middle-most seats first
+            if seating_map[current_searching_row][mid_seat_pos] == AVAILABLE_SEAT_MARK and seats_need_to_book > 0:
+                self.best_seats.append((current_searching_row, mid_seat_pos))
+                seats_need_to_book -= 1
+            seat_idx = 1
+            while seats_need_to_book > 0 and mid_seat_pos + seat_idx <= seating_per_row and mid_seat_pos - seat_idx >= 0:
+                if mid_seat_pos + seat_idx < seating_per_row and seating_map[current_searching_row][mid_seat_pos + seat_idx] == AVAILABLE_SEAT_MARK:
+                    self.best_seats.append((current_searching_row, mid_seat_pos + seat_idx))
                     seats_need_to_book -= 1
-                seat_idx = 1
-                while seats_need_to_book > 0 and mid_seat_pos + seat_idx < seating_per_row and mid_seat_pos - seat_idx >= 0:
-                    if seating_map[current_searching_row][mid_seat_pos + seat_idx] == AVAILABLE_SEAT_MARK:
-                        self.best_seats.append((current_searching_row, mid_seat_pos + seat_idx))
-                        seats_need_to_book -= 1
-                    if seating_map[current_searching_row][mid_seat_pos - seat_idx] == AVAILABLE_SEAT_MARK and seats_need_to_book > 0:
-                        self.best_seats.append((current_searching_row, mid_seat_pos - seat_idx))
-                        seats_need_to_book -= 1
-                    seat_idx += 1
-            return self.best_seats
+                if seating_map[current_searching_row][mid_seat_pos - seat_idx] == AVAILABLE_SEAT_MARK and seats_need_to_book > 0:
+                    self.best_seats.append((current_searching_row, mid_seat_pos - seat_idx))
+                    seats_need_to_book -= 1
+                seat_idx += 1
+        return self.best_seats
 
-        # else:
-        #     seats_need_to_book = num_of_tickets
-        #     for current_searching_row in range(rows):
-        #         if seats_need_to_book <= 0:
-        #             break
-        #         available_seats_in_row = [current_searching_seat for current_searching_seat in range(seating_per_row) if seating_map[current_searching_row][current_searching_seat] == AVAILABLE_SEAT_MARK]
-        #         if len(available_seats_in_row) >= seats_need_to_book:
-        #             left_seat_pos = mid_seat_pos - seats_need_to_book // 2
-        #             right_seat_pos = mid_seat_pos + seats_need_to_book // 2 + (seats_need_to_book % 2)
-        #             best_seats.extend([(current_searching_row, available_seats_in_row[i]) for i in range(left_seat_pos, right_seat_pos)])
-        #             seats_need_to_book = 0
-        #         else:
-        #             best_seats.extend([(current_searching_row, seat) for seat in available_seats_in_row])
-        #             seats_need_to_book -= len(available_seats_in_row)
-        #     self.best_seats = best_seats
-        #     return best_seats
 
     def create_booking_id(self):
         self.movie_and_seats.booking_counter += 1
