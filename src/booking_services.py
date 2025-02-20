@@ -33,7 +33,7 @@ class BookingServices:
 
         seats_need_to_book = num_of_tickets
         for current_searching_row in range(rows):
-            seats_need_to_book = self.book_seats_in_row(seating_map, current_searching_row, seating_per_row, seats_need_to_book)
+            seats_need_to_book = self._book_seats_in_row(seating_map, current_searching_row, seating_per_row, seats_need_to_book)
             if seats_need_to_book == 0:
                 break
         return self.best_seats
@@ -82,12 +82,18 @@ class BookingServices:
             return self.best_seats
         
         for current_searching_row in range(row_idx+1, rows):
-            seats_need_to_book = self.book_seats_in_row(seating_map, current_searching_row, seating_per_row, seats_need_to_book)
+            seats_need_to_book = self._book_seats_in_row(seating_map, current_searching_row, seating_per_row, seats_need_to_book)
             if seats_need_to_book == 0:
                 break
         return self.best_seats
 
     def create_booking_id(self):
+        '''
+        Create a booking ID
+        
+        Returns:
+            str: booking ID
+        '''
         self.movie_and_seats.booking_counter += 1
         self.current_booking_id = f"HKG{self.movie_and_seats.booking_counter:04d}"
         return self.current_booking_id
@@ -100,9 +106,18 @@ class BookingServices:
         self.movie_and_seats.available_seats -= self.num_of_tickets
         self.movie_and_seats.booking_records[self.current_booking_id] = self.best_seats
 
-    def book_seats_in_row(self, seating_map: List[List[str]], current_searching_row: int, seating_per_row: int, seats_need_to_book: int) -> int:
+    def _book_seats_in_row(self, seating_map: List[List[str]], current_searching_row: int, seating_per_row: int, seats_need_to_book: int) -> int:
         """
         Helper function to book available seats in a given row, starting from the middle.
+        
+        Args:
+            seating_map (List[List[str]]): seating map
+            current_searching_row (int): current searching row
+            seating_per_row (int): number of seats per row
+            seats_need_to_book (int): number of seats need to book
+            
+        Returns:
+            int: remaining number of seats need to book
         """
         if seating_per_row % 2 == 0:
             mid_seat_pos = [seating_per_row // 2 - 1, seating_per_row // 2]

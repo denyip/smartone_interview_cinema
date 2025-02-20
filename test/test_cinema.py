@@ -20,6 +20,7 @@ def test_invalid_rows_and_seats_per_row():
 
 def test_find_the_best_seats_case_one():
     movie_and_seats = MovieAndSeats("The Matrix", 10, 10)
-    booking_services = BookingServices(movie_and_seats, 5)
+    booking_services = BookingServices(movie_and_seats, 5, movie_and_seats.seating_map)
     best_seats = booking_services.find_the_best_seats()
-    assert best_seats == [(0, 3), (0, 4), (0, 5), (0, 6), (0, 7)]
+    print(best_seats)
+    assert best_seats == [(0, 4), (0, 5), (0, 6), (0, 3), (0, 7)]

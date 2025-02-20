@@ -112,7 +112,12 @@ class UserInterface:
                 print("Please enter a valid number.")
 
     def display_seating_map(self, seating_map: List[List[str]]):
-        """ Display seating map """
+        """ 
+        Display seating map 
+        
+        Args:
+            seating_map (List[List[str]]): seating map
+        """
         rows = len(seating_map)
         seats_per_row = len(seating_map[0])
         total_width = (seats_per_row*2)+1
