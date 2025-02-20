@@ -29,7 +29,6 @@ class UserInterface:
         movie_and_seats = self.movie_and_seats
         print(f"Movie title: {movie_and_seats.title}, Rows: {movie_and_seats.rows}, Seats per row: {movie_and_seats.seats_per_row}")
         while True:
-            self.display_seating_map(movie_and_seats.seating_map)
             print("Welcome to Rocket Cinemas")
             print(
                 f"[1] Book tickets for {movie_and_seats.title} ({movie_and_seats.available_seats} seats available)")
@@ -40,8 +39,10 @@ class UserInterface:
 
             if selection == "1":
                 self.book_tickets()
+                continue
             if selection == "2":
                 self.check_bookings()
+                continue
             if selection == "3":
                 print("Thank you for using Rocket Cinemas system. Bye!")
                 break
@@ -101,6 +102,23 @@ class UserInterface:
     
     def check_bookings(self):
         """ Check bookings """
+        movie_and_seats = self.movie_and_seats
+        while True:
+            booking_id = input("Enter booking ID to check booking details, or enter blank to go back to the main menu:\n> ")
+            if not booking_id:
+                return
+            if not re.match(r'^HKG[0-9]{4}$', booking_id):
+                print("Invalid booking ID format. Please try again.")
+                return
+            if booking_id not in movie_and_seats.booking_records:
+                print("Booking ID not found.")
+                return
+            print(f"Booking ID: {booking_id}")
+            seating_map = [row[:] for row in movie_and_seats.seating_map]
+            for seat in movie_and_seats.booking_records[booking_id]:
+                row, col = seat
+                seating_map[row][col] = SELECTED_SEAT_MARK
+            self.display_seating_map(seating_map)
     
     def is_seat_input_string_valid(self, seat_input: str):
         """ Validate seat input string """

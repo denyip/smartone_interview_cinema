@@ -46,4 +46,4 @@ class BookingServices:
     def confirm_booking(self):
         self.seating_map = self.target_seating_map
         self.movie_and_seats.available_seats -= self.num_of_tickets
-        self.movie_and_seats.booking_records[self.create_booking_id()] = self.best_seats
+        self.movie_and_seats.booking_records[self.current_booking_id] = self.best_seats
