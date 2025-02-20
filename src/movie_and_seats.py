@@ -14,4 +14,4 @@ class MovieAndSeats:
 
     def validate_input(self):
         if self.rows > MAX_ROWS or self.seats_per_row > MAX_SEATS_PER_ROW:
-            raise ValueError(f"Rows must be less than {MAX_SEATS_PER_ROW} and seats per row must be less than {MAX_ROWS}.")
+            raise ValueError(f"Rows must be less than {MAX_ROWS} and seats per row must be less than {MAX_SEATS_PER_ROW}.")
