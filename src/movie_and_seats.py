@@ -8,6 +8,7 @@ class MovieAndSeats:
         self.available_seats = self.total_seats
         self.seating_map = [
             ["•" for _ in range(seats_per_row)] for _ in range(rows)]
+        self.booking_id = 0
 
     def validate_input(self):
         MAX_ROWS = 26
