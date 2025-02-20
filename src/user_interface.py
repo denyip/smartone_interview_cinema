@@ -121,7 +121,13 @@ class UserInterface:
             self.display_seating_map(seating_map)
     
     def is_seat_input_string_valid(self, seat_input: str):
-        """ Validate seat input string """
+        """
+        Validate seat input string
+        Args:
+            seat_input (str): seat input string
+        Returns:
+            bool: True if seat input string is valid, False otherwise
+        """
         movie_and_seats = self.movie_and_seats
         if not re.match(r'^[A-Z][1-9]$|^[A-Z][1-4][0-9]$|^[A-Z]50$', seat_input):
             print("Invalid seating position format. Please try again.")
