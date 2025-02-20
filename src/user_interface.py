@@ -1,4 +1,5 @@
 from src.movie_and_seats import MovieAndSeats
+from src.booking_services import BookingServices
 from typing import List
 
 class UserInterface:
@@ -58,6 +59,9 @@ class UserInterface:
                 if num_of_tickets > movie_and_seats.available_seats:
                     print("Not enough seats available.")
                     continue
+                booking_services = BookingServices(movie_and_seats, num_of_tickets)
+                target_seating_map = booking_services.find_the_best_seats()
+                self.display_seating_map(target_seating_map)
             except ValueError:
                 print("Please enter a valid number.")
 

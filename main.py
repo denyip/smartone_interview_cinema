@@ -1,5 +1,6 @@
 from src.user_interface import UserInterface
 from src.movie_and_seats import MovieAndSeats
+from src.booking_services import BookingServices
 
 def main():
     ui = UserInterface()
