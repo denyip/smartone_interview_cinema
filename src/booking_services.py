@@ -1,3 +1,4 @@
+from src.constants import *
 from src.movie_and_seats import MovieAndSeats
 
 class BookingServices:
@@ -12,7 +13,7 @@ class BookingServices:
             - Start from the middle-most possible col.
             - When a row is not enough to accommodate the number of tickets, it should overflow to the next row closer to the screen
         Returns:
-            List[List[str]]: target seating map
+            List[Tuple[int, int]]: list of coordinates of the best seats
         """
         master_seating_map = self.master_seating_map
         target_seating_map = self.target_seating_map
@@ -20,13 +21,15 @@ class BookingServices:
         rows = len(target_seating_map)
         seating_per_row = len(target_seating_map[0])
 
-        if(num_of_tickets < seating_per_row):
+        if num_of_tickets < seating_per_row:
             mid_seat_pos = seating_per_row // 2
             left_seat_start_pos = mid_seat_pos - num_of_tickets // 2
             right_seat_end_pos = mid_seat_pos + num_of_tickets // 2 + (num_of_tickets % 2)
 
             for current_searching_row in range(rows):
-                if all(master_seating_map[current_searching_row][current_sarching_seat] == "•" for current_sarching_seat in range(left_seat_start_pos, right_seat_end_pos)):
-                    for current_sarching_seat in range(left_seat_start_pos, right_seat_end_pos):
-                        target_seating_map[current_searching_row][current_sarching_seat] = "#"
-                    return target_seating_map
+                if all(master_seating_map[current_searching_row][current_searching_seat] == AVAILABLE_SEAT_MARK for current_searching_seat in range(left_seat_start_pos, right_seat_end_pos)):
+                    best_seats = []
+                    for current_searching_seat in range(left_seat_start_pos, right_seat_end_pos):
+                        target_seating_map[current_searching_row][current_searching_seat] = SELECTED_SEAT_MARK
+                        best_seats.append((current_searching_row, current_searching_seat))
+                    return best_seats

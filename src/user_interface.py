@@ -1,3 +1,4 @@
+from src.constants import *
 from src.movie_and_seats import MovieAndSeats
 from src.booking_services import BookingServices
 from typing import List
@@ -60,7 +61,11 @@ class UserInterface:
                     print("Not enough seats available.")
                     continue
                 booking_services = BookingServices(movie_and_seats, num_of_tickets)
-                target_seating_map = booking_services.find_the_best_seats()
+                best_seats = booking_services.find_the_best_seats()
+                target_seating_map = [row[:] for row in movie_and_seats.seating_map]
+                for seat in best_seats:
+                    row, col = seat
+                    target_seating_map[row][col] = SELECTED_SEAT_MARK
                 unconfirmed_seating_map = [row[:] for row in target_seating_map]
                 movie_and_seats.seating_map = target_seating_map
                 movie_and_seats.booking_id += 1
@@ -76,12 +81,11 @@ class UserInterface:
         rows = len(seating_map)
         seats_per_row = len(seating_map[0])
         total_width = (seats_per_row*2)+1
-        screen_text = "S C R E E N"
-        screen_text_padding = " "*((total_width - len(screen_text)) // 2)
-        print(f"{screen_text_padding}{screen_text}{screen_text_padding}")
+        screen_text_padding = SPACE_CHAR*((total_width - len(SCREEN_TEXT)) // 2)
+        print(f"{screen_text_padding}{SCREEN_TEXT}{screen_text_padding}")
         print("-" * total_width)
         for i in range(rows-1, -1, -1):
             row_letter = chr(LETTER_A_ASCII + i)
-            print(f"{row_letter} {' '.join(seating_map[i])}")
-        number_str = " ".join(str(i+1) for i in range(seats_per_row))
+            print(f"{row_letter} {SPACE_CHAR.join(seating_map[i])}")
+        number_str = SPACE_CHAR.join(str(i+1) for i in range(seats_per_row))
         print(f"  {number_str}")
