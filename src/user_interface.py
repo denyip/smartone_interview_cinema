@@ -74,27 +74,14 @@ class UserInterface:
                 print(f"Successfully reserved {num_of_tickets} {movie_and_seats.title} tickets.")
                 print(f"Booking ID: {booking_id}")
                 self.display_seating_map(target_seating_map)
-                new_postion = input("Enter blank to accept seat selection, or enter a new seating position")
+                new_postion = input("Enter blank to accept seat selection, or enter a new seating position\n>")
                 if not new_postion:
                     booking_services.confirm_booking()
                     break
                 else:
-                    if not re.match(r'^[A-Z][1-9]$|^[A-Z][1-4][0-9]$|^[A-Z]50$', new_postion):
-                        print("Invalid seating position format. Please try again.")
-                        continue
-                    try:
-                        row_letter = new_postion[0].upper()
-                        seat_number = int(new_postion[1:]) - 1
-                        row_index = ord(row_letter) - LETTER_A_ASCII
-                        if row_index < 0 or row_index >= len(movie_and_seats.seating_map) or seat_number < 0 or seat_number >= len(movie_and_seats.seating_map[0]):
-                            print("Invalid seating position. Please try again.")
-                            continue
-                        if movie_and_seats.seating_map[row_index][seat_number] == SELECTED_SEAT_MARK:
-                            print("Seat already taken. Please choose another seat.")
-                            continue
+                    if not self.is_seat_input_string_valid(new_postion):
                         break
-                    except (ValueError, IndexError):
-                        print("Invalid seating position. Please try again.")
+                    print("New position accepted.")
             except ValueError:
                 print("Please enter a valid number.")
 
@@ -115,21 +102,22 @@ class UserInterface:
     def check_bookings(self):
         """ Check bookings """
     
-    # def is_seat_input_string_valid(self, seat_input: str):
-    #     """ Validate seat input string """
-    #     if not re.match(r'^[A-Z][1-9]$|^[A-Z][1-4][0-9]$|^[A-Z]50$', seat_input):
-    #         print("Invalid seating position format. Please try again.")
-    #         return False
-    #     try:
-    #         row_letter = seat_input[0].upper()
-    #         seat_number = int(seat_input[1:]) - 1
-    #         row_index = ord(row_letter) - LETTER_A_ASCII
-    #         if row_index < 0 or row_index >= len(movie_and_seats.seating_map) or seat_number < 0 or seat_number >= len(movie_and_seats.seating_map[0]):
-    #             print("Invalid seating position. Please try again.")
-    #             continue
-    #         if movie_and_seats.seating_map[row_index][seat_number] == SELECTED_SEAT_MARK:
-    #             print("Seat already taken. Please choose another seat.")
-    #             continue
-    #         break
-    #     except (ValueError, IndexError):
-    #         print("Invalid seating position. Please try again.")
+    def is_seat_input_string_valid(self, seat_input: str):
+        """ Validate seat input string """
+        movie_and_seats = self.movie_and_seats
+        if not re.match(r'^[A-Z][1-9]$|^[A-Z][1-4][0-9]$|^[A-Z]50$', seat_input):
+            print("Invalid seating position format. Please try again.")
+            return False
+        try:
+            row_letter = seat_input[0].upper()
+            seat_number = int(seat_input[1:]) - 1
+            row_index = ord(row_letter) - LETTER_A_ASCII
+            if row_index < 0 or row_index >= len(movie_and_seats.seating_map) or seat_number < 0 or seat_number >= len(movie_and_seats.seating_map[0]):
+                print("Invalid seating position. Please try again.")
+                return False
+            if movie_and_seats.seating_map[row_index][seat_number] == SELECTED_SEAT_MARK:
+                print("Seat already taken. Please choose another seat.")
+                return False
+            return True
+        except (ValueError, IndexError):
+            print("Invalid seating position. Please try again.")
