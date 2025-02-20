@@ -1,4 +1,5 @@
 from src.movie_and_seats import MovieAndSeats
+from typing import List
 
 class UserInterface:
     def __init__(self):
@@ -23,7 +24,7 @@ class UserInterface:
     def main_menu(self, movie_and_seats: MovieAndSeats):
         """ Main menu """
         while True:
-            self.display_seating_map(movie_and_seats)
+            self.display_seating_map(movie_and_seats.seating_map)
             print("Welcome to Rocket Cinemas")
             print(
                 f"[1] Book tickets for {movie_and_seats.title} ({movie_and_seats.total_seats} seats available)")
@@ -60,12 +61,11 @@ class UserInterface:
             except ValueError:
                 print("Please enter a valid number.")
 
-    def display_seating_map(self, movie_and_seats: MovieAndSeats):
+    def display_seating_map(self, seating_map: List[List[str]]):
         """ Display seating map """
         LETTER_A_ASCII = 65
-        rows = movie_and_seats.rows
-        seats_per_row = movie_and_seats.seats_per_row
-        seating_map = movie_and_seats.seating_map
+        rows = len(seating_map)
+        seats_per_row = len(seating_map[0])
         total_width = (seats_per_row*2)+1
         screen_text = "S C R E E N"
         screen_text_padding = " "*((total_width - len(screen_text)) // 2)
