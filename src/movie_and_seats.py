@@ -10,7 +10,8 @@ class MovieAndSeats:
         self.available_seats = self.total_seats
         self.seating_map = [
             [AVAILABLE_SEAT_MARK for _ in range(seats_per_row)] for _ in range(rows)]
-        self.booking_id = 0
+        self.booking_counter = 0
+        self.booking_records = {}
 
     def validate_input(self):
         if self.rows > MAX_ROWS or self.seats_per_row > MAX_SEATS_PER_ROW:
